@@ -20,11 +20,23 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+    val ktorVersion = "3.4.1"
+
 	implementation("org.springframework.boot:spring-boot-starter-batch")
+
+	implementation("com.mysql:mysql-connector-j:8.4.0")
+
+	implementation("io.ktor:ktor-client-core:${ktorVersion}")
+	implementation("io.ktor:ktor-client-cio:${ktorVersion}")
+
 	runtimeOnly("com.h2database:h2")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.batch:spring-batch-test")
+
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     implementation(kotlin("stdlib-jdk8"))
 }
 

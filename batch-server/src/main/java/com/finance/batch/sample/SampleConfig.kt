@@ -6,41 +6,49 @@ import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.repeat.RepeatStatus
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
-class SampleConfig(
-    private val jobRepository: JobRepository,
-    private val transactionManager: PlatformTransactionManager
-) {
+class SampleConfig {
 
     @Bean
-    fun sampleJob(): Job {
+    fun sampleJob(
+        jobRepository: JobRepository,
+        sampleStep1: Step,
+        sampleStep2: Step,
+    ): Job {
         return JobBuilder("sampleJob", jobRepository)
-            .start(sampleStep1())
-            .next(sampleStep2())
+            .start(sampleStep1)
+            .next(sampleStep2)
             .build()
     }
 
     @Bean
-    fun sampleStep1(): Step {
+    fun sampleStep1(
+        jobRepository: JobRepository,
+        @Qualifier("metaTransactionManager") metaTransactionManager: PlatformTransactionManager,
+    ): Step {
         return StepBuilder("sampleStep1", jobRepository)
-            .tasklet({ contribution, chunkContext ->
+            .tasklet({ _, _ ->
                 println("sampleStep1 executing...")
                 RepeatStatus.FINISHED
-            }, transactionManager)
+            }, metaTransactionManager)
             .build()
     }
 
     @Bean
-    fun sampleStep2(): Step {
+    fun sampleStep2(
+        jobRepository: JobRepository,
+        @Qualifier("metaTransactionManager") metaTransactionManager: PlatformTransactionManager,
+    ): Step {
         return StepBuilder("sampleStep2", jobRepository)
-            .tasklet({ contribution, chunkContext ->
+            .tasklet({ _, _ ->
                 println("sampleStep2 executing...")
                 RepeatStatus.FINISHED
-            }, transactionManager)
+            }, metaTransactionManager)
             .build()
     }
 
