@@ -1,0 +1,207 @@
+# 언어 설정
+language: ko-KR
+
+# Reviewer 스타일 설정
+tone_instructions: |
+  - 항상 건설적이고 존중하는 태도로 리뷰하세요.
+  - "~하세요", "~해야 합니다"와 같은 단정적이고 명령적인 표현은 피하고, 제안 형태로 작성하세요.
+  - 코드의 문제점만 지적하지 말고, 왜 그렇게 수정하는 것이 좋은지(성능, 가독성, 유지보수성 등) 이유를 함께 설명하여 시니어의 통찰력을 전달하세요.
+  - 코드의 장점이나 잘 작성된 부분에 대해서는 칭찬을 아끼지 마세요.
+  - 질문을 통해 개발자가 스스로 더 나은 방향을 생각하게 유도하세요.
+
+reviews:
+  profile: chill
+
+  # PR 수정 요청 상태 변경
+  request_changes_workflow: false
+
+  # 리뷰 요약 설정
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true # 리뷰 요약을 댓글로 설정
+  changed_files_summary: true # 변경된 파일 요약
+
+  # 리뷰 상태
+  review_status: true
+  commit_status: true
+  fail_commit_status: false # 코드래빗에 의해 PR이 리뷰될 수 없는 경우 실패 처리 여부
+
+  # PR walkthrough comment 설정
+  collapse_walkthrough: false # collapse 설정 여부
+  sequence_diagram: false
+  estimate_code_review_effort: true # PR 리뷰 난이도/시간 예측치
+
+  # Issue 관련 설정
+  assess_linked_issues: true
+  related_issues: true # AI가 보기에 잠재적으로 관련된 이슈들을 보여줌
+  related_prs: true # 관련된 PR 보여줌
+  suggested_labels: true # 라벨 추천 기능
+  labeling_instructions: [] # 향후 추가
+  auto_apply_labels: false
+
+  # Reviewer 설정
+  suggested_reviewers: false # 혼자 개발하므로 추천해줄 사람이 없음
+  auto_assign_reviewers: true
+
+  # AI 프롬프트 생성
+  enable_prompt_for_ai_agents: false
+
+  path_filters:
+    # 코틀린
+    - "**/*.kt"
+    - "**/*.kts"
+
+    # 자바
+    - "**/*.java"
+    - "**/gen/**"
+    - "!**/test/**/gen/**"
+    - "!**/.git/**"
+    - "!**/target/**"
+
+    # 기타
+    - "!**/build/**"
+    - "!**/.gradle/**"
+    - "!**/out/**"
+    - "!**/generated/**"
+    - "!**/node_modules/**"
+    - "!**/*.md"
+    - "!**/*.txt"
+
+  path_instructions:
+    - path: "**/*.java"
+      instructions: |
+        - Java 21 표준을 사용하여 코드를 리뷰하고, `src/main/checkstyle/checkstyle.xml`에 정의된 규칙을 고려하세요.
+        - 코드 들여쓰기는 탭이 아닌 공백(Space)을 사용하며, 4의 배수 단위를 사용하는지 확인하세요.
+        - 내부 클래스에서 사용하기 위해 필요한 경우가 아니라면, 불변 지역 변수에 `final` 어노테이션을 붙이지 않도록 권장하세요.
+        - 값이 `null`로 캐스팅되는 경우 `var` 키워드 사용을 허용합니다.
+        - 다중 라인 표현식의 경우 연산자와 삼항 연산자 구분자가 줄 끝에 위치하는 코딩 표준을 사용하세요.
+        - Guava API가 아닌 Java 21 표준 API만 사용하는 변경 사항을 제안하세요.
+        - `instanceof` 패턴 매칭 표현식은 `null`을 안전하게 처리하여 `false`를 반환함을 인지하세요.
+    - path: "**/test/java/**/*.java"
+      instructions: |
+        테스트 코드의 경우 다음 사항에 집중하세요:
+        - 테스트 단언문(Assertion)의 정확성
+        - 엣지 케이스에 대한 테스트 커버리지
+        - 명확한 테스트 명칭과 문서화
+        - 코드 스타일이나 사소한 최적화에 대해서는 관대하게 처리하세요.
+
+    - path: "**/*.kt"
+      instructions: |
+        코틀린 베스트 프랙티스 점검 사항:
+
+        언어적 정확성:
+        - Null 안전성: Nullable 타입을 적절하게 사용하고, 불필요한 Null 단언 연산자(!!) 사용을 피하세요.
+        - 불변성: var보다 val 사용을 우선하고, 가능한 경우 불변 컬렉션을 사용하세요.
+        - Data Class 활용: DTO 및 값 객체(Value Object) 정의 시 data class를 사용하세요.
+        - Sealed Class 활용: 제한된 계층 구조를 표현할 때 sealed class를 사용하세요.
+
+        코드 품질:
+        - 복잡도: 순환 복잡도(Cyclomatic Complexity)가 높은 함수(>10)를 지적하세요.
+        - 데드 코드: 사용되지 않는 함수, 변수, 임포트(import)를 식별하세요.
+        - 명명 규칙: 코틀린 표준 컨벤션을 따르세요 (함수/속성은 camelCase, 클래스는 PascalCase).
+
+        코루틴 및 동시성:
+        - 구조화된 동시성: 코루틴 스코프(Scope)가 적절하게 사용되었는지 확인하세요.
+        - 디스패처 오용: 작업 유형에 맞는 디스패처 사용을 확인하세요 (블로킹 작업은 IO, CPU 집약 작업은 Default).
+
+        성능:
+        - 핫 패스(Hot path)에서 불필요한 객체 할당이 발생하는지 확인하세요.
+        - 컬렉션 활용: 적절한 컬렉션 타입과 연산을 사용하세요 (연산 단계가 많은 대규모 컬렉션은 Sequence 사용 권장).
+
+        API 및 설계:
+        - 가시성 제어: 적절한 가시성 수정자를 사용하세요 (public보다는 private이나 internal 권장).
+        - 과도한 노출: 불필요하게 외부로 공개된 API를 식별하여 제한하세요.
+
+        에러 처리:
+        - 예외 처리: 예외를 단순히 무시(swallow)하지 말고 적절하게 처리하세요.
+        - Result 타입: 실패 가능성이 있는 작업에는 Result 타입 사용을 고려하세요.
+
+        보안:
+        - 하드코딩된 비밀번호나 인증 정보가 없는지 확인하세요.
+        - 보안이 중요한 작업에는 Random 대신 SecureRandom을 사용하세요.
+        - 안전하지 않은 역직렬화(Deserialization)를 피하세요.
+
+    - path: "**/*.kts"
+      instructions: |
+        Kotlin script best practices to check:
+
+        Language correctness:
+        - Null safety: Ensure proper use of nullable types, avoid unnecessary null assertions (!!)
+        - Immutability: Prefer val over var, use immutable collections where possible
+
+        Code quality:
+        - Complexity: Flag overly complex scripts
+        - Naming conventions: Follow Kotlin naming conventions
+
+        Security:
+        - No hardcoded secrets or credentials
+
+    - path: "**/*Test*.kt"
+      instructions: |
+        Test-specific best practices:
+        - Use descriptive test names that explain scenario and expected outcome
+        - Follow Arrange-Act-Assert pattern
+        - Each test should verify one logical concept
+        - Focus on behavior, not implementation details
+        - Ensure proper test isolation (no shared mutable state)
+        - Test edge cases: nulls, empty collections, boundary conditions
+        - Use assertThrows for exception scenarios
+
+    - path: "**/build.gradle.kts"
+      instructions: |
+        Review for:
+        - Deprecated jcenter() repository (sunset in 2022, use mavenCentral)
+        - Outdated dependency versions with known vulnerabilities
+        - Hardcoded versions vs version catalogs
+        - Deprecated Gradle APIs
+
+  tools:
+    # Secret Info 유출 방지
+    gitleaks:
+      enabled: true
+    # Dockerfile 린터
+    hadolint:
+      enabled: true
+    # IaC 파일 (Kubernetes, Docker 등) 보안 스캐너
+    trivy:
+      enabled: true
+    # 인프라 설정 파일 정적 분석
+    checkov:
+      enabled: true
+
+  # 기타
+  abort_on_close: true # PR이 머지되거나 닫히면 리뷰 중단
+  disable_cache: false # 리뷰가 실행될 때마다 코드나 의존성 캐싱 여부
+
+  # 자동 리뷰
+  auto_review:
+    enabled: true
+    auto_incremental_review: true # PR 코드 수정 리뷰 반영
+    drafts: false # 초안 작성 중인 경우 리뷰 X
+    base_branches: ["develop", "main"]
+
+    ignore_usernames: ["dependabot", "dependabot[bot]"]
+
+chat:
+  auto_reply: true
+
+  integrations:
+    # Jira 티켓 연동
+    jira:
+      enabled: true
+      project_keys: ["TGNX"]
+
+knowledge_base:
+  opt_out: false # 지식 베이스 사용 여부
+  web_search: # 웹 검색 허용
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "**/docs/kotlin-style-guide.md"
+      - "**/docs/java-style-guide.md"
+  learnings: # 지식 사용 유효 범위 설정
+    scope: local
+  issues:
+    scope: auto # 이슈 검색 범위
+  pull_requests: # PR 참고 범위
+    scope: local
