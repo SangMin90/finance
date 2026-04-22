@@ -3,11 +3,17 @@ language: ko-KR
 
 # Reviewer 스타일 설정
 tone_instructions: |
-  - 항상 건설적이고 존중하는 태도로 리뷰하세요.
-  - "~하세요", "~해야 합니다"와 같은 단정적이고 명령적인 표현은 피하고, 제안 형태로 작성하세요.
-  - 코드의 문제점만 지적하지 말고, 왜 그렇게 수정하는 것이 좋은지(성능, 가독성, 유지보수성 등) 이유를 함께 설명하여 시니어의 통찰력을 전달하세요.
-  - 코드의 장점이나 잘 작성된 부분에 대해서는 칭찬을 아끼지 마세요.
-  - 질문을 통해 개발자가 스스로 더 나은 방향을 생각하게 유도하세요.
+  - You are a seasoned Senior Engineer (15+ years of experience) and a supportive mentor. Maintain a tone that is constructive, respectful, and empathetic.
+  - Avoid using imperative or dictatorial language (e.g., "Do this", "You must"). Instead, use suggestive and collaborative phrasing (e.g., "What do you think about...", "I suggest considering...", "It might be beneficial to...").
+  - Do not just point out flaws. Always explain the "Why" behind your suggestions, providing insights into performance, readability, and maintainability to share your senior-level perspective.
+  - Actively praise high-quality code. Give specific compliments on well-designed logic, clear naming conventions, or thorough error handling.
+  - Encourage the developer's growth by asking thought-provoking questions (e.g., "How would this handle edge case X?") rather than just providing the direct solution.
+  - Use precise technical terminology, but explain complex concepts kindly when appropriate to turn the review into a learning opportunity.
+  - Maintain a "we are in this together" mindset to build a collaborative atmosphere.
+  - Classify your feedback into three priority levels using the following prefixes in Korean:
+    - **[P1: 필수]**: Critical issues (bugs, security, significant performance bottlenecks) that MUST be fixed.
+    - **[P2: 권장]**: Improvements for better readability, maintainability, or minor optimizations. Highly recommended but not blocking.
+    - **[P3: 제안]**: Nitpicks, minor style preferences, or alternative ideas. "Take it or leave it" suggestions.
 
 reviews:
   profile: chill
@@ -67,60 +73,67 @@ reviews:
     - "!**/*.txt"
 
   path_instructions:
-    - path: "**/*.java"
+    - path: "**/src/main/java/**/*.java"
       instructions: |
-        - Java 21 표준을 사용하여 코드를 리뷰하고, `src/main/checkstyle/checkstyle.xml`에 정의된 규칙을 고려하세요.
-        - 코드 들여쓰기는 탭이 아닌 공백(Space)을 사용하며, 4의 배수 단위를 사용하는지 확인하세요.
-        - 내부 클래스에서 사용하기 위해 필요한 경우가 아니라면, 불변 지역 변수에 `final` 어노테이션을 붙이지 않도록 권장하세요.
-        - 값이 `null`로 캐스팅되는 경우 `var` 키워드 사용을 허용합니다.
-        - 다중 라인 표현식의 경우 연산자와 삼항 연산자 구분자가 줄 끝에 위치하는 코딩 표준을 사용하세요.
-        - Guava API가 아닌 Java 21 표준 API만 사용하는 변경 사항을 제안하세요.
-        - `instanceof` 패턴 매칭 표현식은 `null`을 안전하게 처리하여 `false`를 반환함을 인지하세요.
-    - path: "**/test/java/**/*.java"
+        **Strictly adhere to Section I (Shared Principle)** and **Section II (Java Implementation)** of `/docs/convention-guide-en.md`.
+        - Verify architectural integrity (Layered Architecture, CQS) from Section Ⅰ.1.
+        - Apply naming and exception strategies from Section Ⅰ.2.
+        - Enforce Java 21+ standards from Section Ⅱ.
+
+        **Style & Formatting (Checkstyle Compliance)**
+        - **Compliance**: Adhere to rules in `config/checkstyle/java-checkstyle.xml`.
+        - **Line Breaks**: Multi-line expressions must have operators and ternary separators at the **end of line**.
+        - **Final Usage**: Do not use `final` for local variables unless required (e.g., inner classes).
+        - **Var Keyword**: Encourage the use of `var` **only when the type is clearly evident** from the constructor or factory method call.
+
+    - path: "**/src/test/java/**/*.java"
       instructions: |
-        테스트 코드의 경우 다음 사항에 집중하세요:
-        - 테스트 단언문(Assertion)의 정확성
-        - 엣지 케이스에 대한 테스트 커버리지
-        - 명확한 테스트 명칭과 문서화
-        - 코드 스타일이나 사소한 최적화에 대해서는 관대하게 처리하세요.
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide.md`.
 
-    - path: "**/*.kt"
+        ### 1. Test Quality & Coverage
+        - **Logic**: Focus on assertion correctness and edge case coverage (null, empty, exceptions).
+        - **Naming**: Use clear test naming. Be more lenient with minor code style or performance optimizations in tests.
+        - **Pattern**: Follow the **Arrange-Act-Assert** pattern as defined in the guide.
+
+        ### 2. Spring REST Docs Compliance
+        - **Field Documentation**: Ensure all request/response fields are documented using `fieldDescriptor`.
+        - **Description Quality**: Flag vague descriptions (e.g., "The name", "ID") and suggest business-contextual text.
+        - **Consistency**: The `document("identifier", ...)` ID must strictly match the test method name.
+
+    - path: "**/test/**/*.kt"
       instructions: |
-        코틀린 베스트 프랙티스 점검 사항:
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide.md`.
 
-        언어적 정확성:
-        - Null 안전성: Nullable 타입을 적절하게 사용하고, 불필요한 Null 단언 연산자(!!) 사용을 피하세요.
-        - 불변성: var보다 val 사용을 우선하고, 가능한 경우 불변 컬렉션을 사용하세요.
-        - Data Class 활용: DTO 및 값 객체(Value Object) 정의 시 data class를 사용하세요.
-        - Sealed Class 활용: 제한된 계층 구조를 표현할 때 sealed class를 사용하세요.
+        ### 1. Kotlin Idiomatic Testing
+        - **Naming**: Use backticks for descriptive test names (e.g., `` `should return error when age is negative` ``).
+        - **Pattern**: Strictly follow the **Arrange-Act-Assert** pattern.
+        - **Isolation**: Each test must verify one logical concept with no shared mutable state.
 
-        코드 품질:
-        - 복잡도: 순환 복잡도(Cyclomatic Complexity)가 높은 함수(>10)를 지적하세요.
-        - 데드 코드: 사용되지 않는 함수, 변수, 임포트(import)를 식별하세요.
-        - 명명 규칙: 코틀린 표준 컨벤션을 따르세요 (함수/속성은 camelCase, 클래스는 PascalCase).
+        ### 2. Best Practices
+        - **Behavior Focus**: Validate outcomes and behaviors, not internal implementation details.
+        - **Edge Cases**: Mandate tests for nulls, empty collections, and boundary conditions.
+        - **Mocking**: Use **MockK** (`every`, `verify`, `coEvery`) for idiomatic mocking instead of Mockito.
+        - **Exceptions**: Use `shouldThrow` or `assertThrows` for exception scenarios to ensure robust error handling.
 
-        코루틴 및 동시성:
-        - 구조화된 동시성: 코루틴 스코프(Scope)가 적절하게 사용되었는지 확인하세요.
-        - 디스패처 오용: 작업 유형에 맞는 디스패처 사용을 확인하세요 (블로킹 작업은 IO, CPU 집약 작업은 Default).
+    - path: "**/build.gradle.kts"
+      instructions: |
+        Review for:
+        - Deprecated jcenter() repository (sunset in 2022, use mavenCentral)
+        - Outdated dependency versions with known vulnerabilities
+        - Hardcoded versions vs version catalogs
+        - Deprecated Gradle APIs
 
-        성능:
-        - 핫 패스(Hot path)에서 불필요한 객체 할당이 발생하는지 확인하세요.
-        - 컬렉션 활용: 적절한 컬렉션 타입과 연산을 사용하세요 (연산 단계가 많은 대규모 컬렉션은 Sequence 사용 권장).
+    - path: "src/main/**/*.kt"
+      instructions: |
+        **Strictly adhere to Section I (Shared Principle)** and **Section III (Kotlin Implementation)** of `/docs/convention-guide.md`.
+        - Verify architectural integrity (Layered Architecture, CQS) from Section I.
+        - Apply Kotlin-specific safety and performance rules from Section III.
 
-        API 및 설계:
-        - 가시성 제어: 적절한 가시성 수정자를 사용하세요 (public보다는 private이나 internal 권장).
-        - 과도한 노출: 불필요하게 외부로 공개된 API를 식별하여 제한하세요.
+        ### **Style & Formatting (Checkstyle Compliance)**
+        - ensure code complies with the static analysis rules defined in `/config/detekt/detekt.yml`.
+        - If Detekt fails to catch a naming convention or complexity issue defined in the config, please point it out.
 
-        에러 처리:
-        - 예외 처리: 예외를 단순히 무시(swallow)하지 말고 적절하게 처리하세요.
-        - Result 타입: 실패 가능성이 있는 작업에는 Result 타입 사용을 고려하세요.
-
-        보안:
-        - 하드코딩된 비밀번호나 인증 정보가 없는지 확인하세요.
-        - 보안이 중요한 작업에는 Random 대신 SecureRandom을 사용하세요.
-        - 안전하지 않은 역직렬화(Deserialization)를 피하세요.
-
-    - path: "**/*.kts"
+    - path: "src/main/kotlin/**/*.kts"
       instructions: |
         Kotlin script best practices to check:
 
@@ -135,24 +148,15 @@ reviews:
         Security:
         - No hardcoded secrets or credentials
 
-    - path: "**/*Test*.kt"
+    - path: "**/batch/**/*.kt"
       instructions: |
-        Test-specific best practices:
-        - Use descriptive test names that explain scenario and expected outcome
-        - Follow Arrange-Act-Assert pattern
-        - Each test should verify one logical concept
-        - Focus on behavior, not implementation details
-        - Ensure proper test isolation (no shared mutable state)
-        - Test edge cases: nulls, empty collections, boundary conditions
-        - Use assertThrows for exception scenarios
-
-    - path: "**/build.gradle.kts"
-      instructions: |
-        Review for:
-        - Deprecated jcenter() repository (sunset in 2022, use mavenCentral)
-        - Outdated dependency versions with known vulnerabilities
-        - Hardcoded versions vs version catalogs
-        - Deprecated Gradle APIs
+        - **Kotlin Style**: Follow Kotlin idiomatic ways (e.g., use `let`, `run`, `apply` appropriately, prefer immutable `val`).
+        - **Spring Batch Kotlin DSL**: When using DSL, ensure the flow is easy to follow. If a `Step` logic becomes too long within the DSL, suggest extracting it into a separate `Tasklet` or `ItemProcessor`.
+        - **Documentation (KDoc)**: 
+          - Do not ask for KDocs on `data class` or simple functions.
+          - **Focus on the 'Why'**: In `ItemProcessor` or complex `Business Logic`, if the code doesn't explain "Why" a certain transformation is happening, request a concise KDoc.
+        - **Null Safety**: Kotlin's strength is null safety. Scrutinize any use of `!!` (double bang) operator and suggest safer alternatives like `?:` or `requireNotNull()`.
+        - **Performance**: In Batch processing, avoid heavy object allocation inside `process` or `write` loops.
 
   tools:
     # Secret Info 유출 방지
@@ -197,8 +201,9 @@ knowledge_base:
   code_guidelines:
     enabled: true
     filePatterns:
-      - "**/docs/kotlin-style-guide.md"
-      - "**/docs/java-style-guide.md"
+      - "**/docs/convention-guide-en.md"
+      - "**/config/detekt/detekt.md"
+      - "**/config/checkstyle/java-checkstyle.md"
   learnings: # 지식 사용 유효 범위 설정
     scope: local
   issues:
