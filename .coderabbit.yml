@@ -3,7 +3,7 @@ language: ko-KR
 
 # Reviewer 스타일 설정
 tone_instructions: |
-  Act as a 15+ yr senior mentor. Use collaborative phrasing (e.g., "Consider...", "What if..."). Always explain the "Why" regarding performance & readability. Praise high-quality code. Use Korean prefixes: [P1: 필수] (Critical), [P2: 권장] (Recommended), [P3: 제안] (Nitpick). Foster growth by asking thought-provoking questions.
+  Act as 15+ yr senior mentor. Use collaborative phrasing ("Consider...", "What if..."). Explain the "why" (performance/readability). Praise good code. Korean prefixes: [P1: 필수] critical, [P2: 권장] recommended, [P3: 제안] nitpick. Ask thought-provoking questions.
 
 reviews:
   profile: chill
@@ -23,7 +23,7 @@ reviews:
 
   # PR walkthrough comment 설정
   collapse_walkthrough: false # collapse 설정 여부
-  sequence_diagram: false
+  sequence_diagrams: false
   estimate_code_review_effort: true # PR 리뷰 난이도/시간 예측치
 
   # Issue 관련 설정
@@ -65,7 +65,7 @@ reviews:
   path_instructions:
     - path: "**/src/main/java/**/*.java"
       instructions: |
-        **Strictly adhere to Section I (Shared Principle)** and **Section II (Java Implementation)** of `/docs/convention-guide-en.md`.
+        **Strictly adhere to Section I (Shared Principle)** and **Section II (Java Implementation)** of `/docs/convention/convention-guide-en.md`.
         - Verify architectural integrity (Layered Architecture, CQS) from Section Ⅰ.1.
         - Apply naming and exception strategies from Section Ⅰ.2.
         - Enforce Java 21+ standards from Section Ⅱ.
@@ -78,7 +78,7 @@ reviews:
 
     - path: "**/src/test/java/**/*.java"
       instructions: |
-        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide.md`.
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide-en.md`.
 
         ### 1. Test Quality & Coverage
         - **Logic**: Focus on assertion correctness and edge case coverage (null, empty, exceptions).
@@ -92,7 +92,7 @@ reviews:
 
     - path: "**/test/**/*.kt"
       instructions: |
-        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide.md`.
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention/convention-guide-en.md`.
 
         ### 1. Kotlin Idiomatic Testing
         - **Naming**: Use backticks for descriptive test names (e.g., `` `should return error when age is negative` ``).
@@ -115,7 +115,7 @@ reviews:
 
     - path: "src/main/**/*.kt"
       instructions: |
-        **Strictly adhere to Section I (Shared Principle)** and **Section III (Kotlin Implementation)** of `/docs/convention-guide.md`.
+        **Strictly adhere to Section I (Shared Principle)** and **Section III (Kotlin Implementation)** of `/docs/convention/convention-guide-en.md`.
         - Verify architectural integrity (Layered Architecture, CQS) from Section I.
         - Apply Kotlin-specific safety and performance rules from Section III.
 
@@ -179,21 +179,22 @@ chat:
   auto_reply: true
 
   integrations:
-    # Jira 티켓 연동
     jira:
-      enabled: true
-      project_keys: ["TGNX"]
+      usage: enabled
 
 knowledge_base:
   opt_out: false # 지식 베이스 사용 여부
   web_search: # 웹 검색 허용
     enabled: true
+  jira:
+    usage: enabled
+    project_keys: ["TGNX"]
   code_guidelines:
     enabled: true
     filePatterns:
-      - "**/docs/convention-guide-en.md"
-      - "**/config/detekt/detekt.md"
-      - "**/config/checkstyle/java-checkstyle.md"
+      - "**/docs/convention/convention-guide-en.md"
+      - "**/config/detekt/detekt.yml"
+      - "**/config/checkstyle/java-checkstyle.xml"
   learnings: # 지식 사용 유효 범위 설정
     scope: local
   issues:
