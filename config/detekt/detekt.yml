@@ -4,11 +4,23 @@ comments:
   UndocumentedPublicClass:
     active: true
     excludes: ["**/*.kt"]
-    includes: ["**/detekt-api/src/main/**/api/*.kt"]
+    includes:
+      [
+        "**/presentation/**/*.kt",
+        "**/batch/**/reader/**/*.kt",
+        "**/batch/**/writer/**/*.kt",
+        "**/batch/**/processor/**/*.kt",
+      ]
   UndocumentedPublicFunction:
     active: true
     excludes: ["**/*.kt"]
-    includes: ["**/detekt-api/src/main/**/api/*.kt"]
+    includes:
+      [
+        "**/presentation/**/*.kt",
+        "**/batch/**/reader/**/*.kt",
+        "**/batch/**/writer/**/*.kt",
+        "**/batch/**/processor/**/*.kt",
+      ]
 
 complexity:
   StringLiteralDuplication:
@@ -164,7 +176,7 @@ style:
         reason: "Forbidden TODO todo marker in comment, please do the changes."
       - value: "@author"
         reason: "Authors are not recorded in KDoc."
-    excludes: ["**/detekt-rules-style/**/ForbiddenComment.kt"]
+    excludes: []
   ForbiddenImport:
     active: true
     imports:
@@ -178,16 +190,18 @@ style:
         reason: "Use AssertJ assertThatCode { }.isInstanceOf() or assertThatExceptionOfType().isThrownBy { } instead."
       - value: "org.junit.jupiter.api.assertDoesNotThrow"
         reason: "Use AssertJ assertThatCode { }.doesNotThrowAnyException() instead."
+      - value: "org.mockito.Mockito.*"
+        reason: "Forbidden. Use MockK (mockk, every, verify) for idiomatic Kotlin mocking."
+      - value: "org.mockito.mock"
+        reason: "Use mockk<Type>() instead."
+      - value: "java.util.stream.*"
+        reason: "Use Kotlin's Sequences for better performance and idiomatic syntax."
+      - value: "java.util.Optional"
+        reason: "Forbidden. Use Kotlin's Null-safety (Type?) and the Elvis operator (?:). Convert library-returned Optionals immediately using .getOrNull()."
       # These don't have AssertJ alternatives, so just allow them:
       #- value: 'org.junit.jupiter.api.fail'
       #- value: 'org.junit.jupiter.api.assertTimeout'
       #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
-      - value: "java.util.stream.*"
-        reason: "Use Kotlin's sequences instead."
-      - value: "org.jetbrains.kotlin.js.*"
-        reason: "detekt does not support Kotlin/JS at this time"
-      - value: "org.jetbrains.kotlin.backend.*"
-        reason: "detekt interacts with compiler frontend only"
   ForbiddenMethodCall:
     active: true
     methods:
