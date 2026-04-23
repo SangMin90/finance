@@ -2,7 +2,9 @@
 
 ## Ⅰ. 공통 원칙 (Core Principles)
 
-### Ⅰ.1 아키텍처 및 생명주기 (Architecture & Lifecycle)#### Ⅰ.1.1 패키지 구조
+### Ⅰ.1 아키텍처 및 생명주기 (Architecture & Lifecycle)
+
+#### Ⅰ.1.1 패키지 구조
 
 시스템은 **Feature** 기반의 패키지 구조를 따른다. 각 Feature 내부에서는 DDD에서 영감을 받은 `4-level Layered Architecture`를 유지한다.
 
@@ -144,10 +146,10 @@
     - 함수/프로퍼티: camelCase
     - 클래스: PascalCase.
 
-### Ⅲ.3 Corutine 및 Concurrency
+### Ⅲ.3 Coroutine 및 Concurrency
 
 - Structured Concurrency
-  - Corutine Scope를 명확히 관리한다.
+  - Coroutine Scope를 명확히 관리한다.
 - Dispatcher 구분
   - 차단(Blocking) 작업은 IO,
   - CPU 작업은 Default
