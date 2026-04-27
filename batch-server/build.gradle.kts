@@ -1,8 +1,8 @@
 plugins {
-	id("org.springframework.boot")
-	id("io.spring.dependency-management")
-    kotlin("jvm")
-	kotlin("plugin.spring")
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.kotlin.spring)
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.finance"
