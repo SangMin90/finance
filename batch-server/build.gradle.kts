@@ -2,7 +2,6 @@ plugins {
 	alias(libs.plugins.kotlin.jvm)
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
-	alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.finance"
@@ -15,6 +14,7 @@ java {
 }
 
 dependencies {
+	implementation(platform(libs.spring.dependency))
 	implementation("org.springframework.boot:spring-boot-starter-batch")
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
