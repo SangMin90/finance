@@ -15,7 +15,7 @@ import javax.sql.DataSource
 class DataSourceConfig {
 
     @Primary
-    @Bean("dataSource")
+    @Bean(name = ["dataSource", "metaDataSource"])
     @ConfigurationProperties(prefix = "spring.datasource.meta")
     fun metaDataSource(): DataSource =
         DataSourceBuilder.create().type(HikariDataSource::class.java).build()
@@ -26,9 +26,9 @@ class DataSourceConfig {
         DataSourceBuilder.create().type(HikariDataSource::class.java).build()
 
     @Primary
-    @Bean("metaTransactionManager")
+    @Bean(name = ["transactionManager", "metaTransactionManager"])
     fun metaTransactionManager(
-        @Qualifier("dataSource") datasource: DataSource,
+        @Qualifier("metaDataSource") datasource: DataSource,
     ) : PlatformTransactionManager = JdbcTransactionManager(datasource)
 
     @Bean("financeTransactionManager")
