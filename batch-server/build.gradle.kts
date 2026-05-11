@@ -25,11 +25,10 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-batch")
 
-	implementation("com.mysql:mysql-connector-j:8.4.0")
-
 	implementation("io.ktor:ktor-client-core:${ktorVersion}")
 	implementation("io.ktor:ktor-client-cio:${ktorVersion}")
 
+	runtimeOnly("com.mysql:mysql-connector-j:8.4.0")
 	runtimeOnly("com.h2database:h2")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
