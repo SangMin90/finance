@@ -8,7 +8,7 @@ plugins {
 }
 
 noArg {
-	annotation("com.finance.batch.global.NoArg")
+	annotation("com.finance.batch.global.annotation.NoArg")
 }
 
 group = "com.finance"
