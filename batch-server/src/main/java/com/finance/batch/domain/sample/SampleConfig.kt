@@ -14,6 +14,7 @@ import org.springframework.batch.item.database.JdbcPagingItemReader
 import org.springframework.batch.item.database.Order
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
@@ -21,8 +22,10 @@ import javax.sql.DataSource
 
 @Configuration
 class SampleConfig(
+    @param:Qualifier("financeDataSource")
     private val dataSource: DataSource,
     private val jobRepository: JobRepository,
+    @param:Qualifier("financeTransactionManager")
     private val transactionManager: PlatformTransactionManager,
 ) {
 
@@ -59,7 +62,7 @@ class SampleConfig(
             .selectClause("SELECT id, name")
             .fromClause("FROM sample_source")
             .sortKeys(mapOf("id" to Order.ASCENDING))
-            .beanRowMapper(SampleSource::class.java)
+            .dataRowMapper(SampleSource::class.java)
             .build()
     }
 
