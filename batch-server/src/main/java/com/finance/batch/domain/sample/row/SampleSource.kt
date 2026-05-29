@@ -1,4 +1,4 @@
-package com.finance.batch.domain.finance.sample.row
+package com.finance.batch.domain.sample.row
 
 import com.finance.batch.global.annotation.NoArg
 

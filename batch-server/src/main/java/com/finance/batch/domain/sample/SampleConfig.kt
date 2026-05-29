@@ -1,7 +1,7 @@
 package com.finance.batch.domain.sample
 
-import com.finance.batch.domain.finance.sample.row.Sample
-import com.finance.batch.domain.finance.sample.row.SampleSource
+import com.finance.batch.domain.sample.row.Sample
+import com.finance.batch.domain.sample.row.SampleSource
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.builder.JobBuilder
@@ -14,8 +14,6 @@ import org.springframework.batch.item.database.JdbcPagingItemReader
 import org.springframework.batch.item.database.Order
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder
-import org.springframework.batch.repeat.RepeatStatus
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager

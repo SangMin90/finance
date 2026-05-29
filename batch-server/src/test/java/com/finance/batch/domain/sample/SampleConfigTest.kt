@@ -1,12 +1,11 @@
 package com.finance.batch.domain.sample
 
-import com.finance.batch.domain.finance.sample.row.Sample
+import com.finance.batch.domain.sample.row.Sample
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import org.springframework.batch.core.Job
-import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.test.JobLauncherTestUtils
 import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.boot.test.context.SpringBootTest

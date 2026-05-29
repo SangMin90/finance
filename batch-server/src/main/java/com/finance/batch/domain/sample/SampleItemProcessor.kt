@@ -1,7 +1,7 @@
 package com.finance.batch.domain.sample
 
-import com.finance.batch.domain.finance.sample.row.Sample
-import com.finance.batch.domain.finance.sample.row.SampleSource
+import com.finance.batch.domain.sample.row.Sample
+import com.finance.batch.domain.sample.row.SampleSource
 import org.springframework.batch.item.ItemProcessor
 import org.springframework.stereotype.Component
 
@@ -14,6 +14,6 @@ class SampleItemProcessor : ItemProcessor<SampleSource, Sample> {
             throw RuntimeException("ERROR")
         }
 
-        return Sample.of(item)
+         return Sample.of(item)
     }
 }
