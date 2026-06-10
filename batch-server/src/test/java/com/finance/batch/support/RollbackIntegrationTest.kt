@@ -52,7 +52,7 @@ class RollbackIntegrationTest(
 
         `when`("잡을 실행하면") {
 
-            shouldThrow<Exception> {
+            shouldThrow<DataAccessResourceFailureException> {
                 jobLauncherTestUtils.launchJob()
             }
 
