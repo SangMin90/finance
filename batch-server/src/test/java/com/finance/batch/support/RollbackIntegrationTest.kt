@@ -5,6 +5,7 @@ import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import io.mockk.clearMocks
 import io.mockk.every
 import org.springframework.batch.core.BatchStatus
 import org.springframework.batch.core.JobExecution
@@ -18,7 +19,7 @@ import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ActiveProfiles
 
-@Import(TestConfiguration::class)
+@Import(SpyBatchTestConfiguration::class)
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
@@ -32,6 +33,7 @@ class RollbackIntegrationTest(
 
     beforeContainer { testCase ->
         if (testCase.name.prefix?.startsWith("Given:") == true) {
+            clearMocks(spyJobRepository)
             jdbcTemplate.execute("TRUNCATE TABLE sample_source")
             jdbcTemplate.execute("TRUNCATE TABLE sample")
         }
