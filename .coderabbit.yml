@@ -1,0 +1,203 @@
+# 언어 설정
+language: ko-KR
+
+# Reviewer 스타일 설정
+tone_instructions: |
+  Act as a 15+ yr senior mentor. Use collaborative phrasing. Explain "Why" (performance/readability). Acknowledge good practices. Use Korean prefixes: [P1: 필수] (Critical), [P2: 권장] (Recommended) [P3: 제안] (Nitpick). Ask thought-provoking questions.
+
+reviews:
+  profile: chill
+
+  # PR 수정 요청 상태 변경
+  request_changes_workflow: false
+
+  # 리뷰 요약 설정
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true # 리뷰 요약을 댓글로 설정
+  changed_files_summary: true # 변경된 파일 요약
+
+  # 리뷰 상태
+  review_status: true
+  commit_status: true
+  fail_commit_status: false # 코드래빗에 의해 PR이 리뷰될 수 없는 경우 실패 처리 여부
+
+  # PR walkthrough comment 설정
+  collapse_walkthrough: false # collapse 설정 여부
+  sequence_diagrams: false
+  estimate_code_review_effort: true # PR 리뷰 난이도/시간 예측치
+
+  # Issue 관련 설정
+  assess_linked_issues: true
+  related_issues: true # AI가 보기에 잠재적으로 관련된 이슈들을 보여줌
+  related_prs: true # 관련된 PR 보여줌
+  suggested_labels: true # 라벨 추천 기능
+  labeling_instructions: [] # 향후 추가
+  auto_apply_labels: false
+
+  # Reviewer 설정
+  suggested_reviewers: false # 혼자 개발하므로 추천해줄 사람이 없음
+  auto_assign_reviewers: true
+
+  # AI 프롬프트 생성
+  enable_prompt_for_ai_agents: false
+
+  path_filters:
+    # 코틀린
+    - "**/*.kt"
+    - "**/*.kts"
+
+    # 자바
+    - "**/*.java"
+    - "**/gen/**"
+    - "!**/test/**/gen/**"
+    - "!**/.git/**"
+    - "!**/target/**"
+
+    # 기타
+    - "!**/build/**"
+    - "!**/.gradle/**"
+    - "!**/out/**"
+    - "!**/generated/**"
+    - "!**/node_modules/**"
+    - "!**/*.md"
+    - "!**/*.txt"
+
+  path_instructions:
+    - path: "**/src/main/java/**/*.java"
+      instructions: |
+        **Strictly adhere to Section I (Shared Principle)** and **Section II (Java Implementation)** of `/docs/convention/convention-guide-en.md`.
+        - Verify architectural integrity (Layered Architecture, CQS) from Section Ⅰ.1.
+        - Apply naming and exception strategies from Section Ⅰ.2.
+        - Enforce Java 21+ standards from Section Ⅱ.
+
+        **Style & Formatting (Checkstyle Compliance)**
+        - **Compliance**: Adhere to rules in `config/checkstyle/java-checkstyle.xml`.
+        - **Line Breaks**: Multi-line expressions must have operators and ternary separators at the **end of line**.
+        - **Final Usage**: Do not use `final` for local variables unless required (e.g., inner classes).
+        - **Var Keyword**: Encourage the use of `var` **only when the type is clearly evident** from the constructor or factory method call.
+
+    - path: "**/src/test/java/**/*.java"
+      instructions: |
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention-guide-en.md`.
+
+        ### 1. Test Quality & Coverage
+        - **Logic**: Focus on assertion correctness and edge case coverage (null, empty, exceptions).
+        - **Naming**: Use clear test naming. Be more lenient with minor code style or performance optimizations in tests.
+        - **Pattern**: Follow the **Arrange-Act-Assert** pattern as defined in the guide.
+
+        ### 2. Spring REST Docs Compliance
+        - **Field Documentation**: Ensure all request/response fields are documented using `fieldDescriptor`.
+        - **Description Quality**: Flag vague descriptions (e.g., "The name", "ID") and suggest business-contextual text.
+        - **Consistency**: The `document("identifier", ...)` ID must strictly match the test method name.
+
+    - path: "**/test/**/*.kt"
+      instructions: |
+        **Strictly adhere to Section Ⅰ.3 (Quality Assurance)** of `/docs/convention/convention-guide-en.md`.
+
+        ### 1. Kotlin Idiomatic Testing
+        - **Naming**: Use backticks for descriptive test names (e.g., `` `should return error when age is negative` ``).
+        - **Pattern**: Strictly follow the **Arrange-Act-Assert** pattern.
+        - **Isolation**: Each test must verify one logical concept with no shared mutable state.
+
+        ### 2. Best Practices
+        - **Behavior Focus**: Validate outcomes and behaviors, not internal implementation details.
+        - **Edge Cases**: Mandate tests for nulls, empty collections, and boundary conditions.
+        - **Mocking**: Use **MockK** (`every`, `verify`, `coEvery`) for idiomatic mocking instead of Mockito.
+        - **Exceptions**: Use `shouldThrow` or `assertThrows` for exception scenarios to ensure robust error handling.
+
+    - path: "**/build.gradle.kts"
+      instructions: |
+        Review for:
+        - Deprecated jcenter() repository (sunset in 2022, use mavenCentral)
+        - Outdated dependency versions with known vulnerabilities
+        - Hardcoded versions vs version catalogs
+        - Deprecated Gradle APIs
+
+    - path: "src/main/**/*.kt"
+      instructions: |
+        **Strictly adhere to Section I (Shared Principle)** and **Section III (Kotlin Implementation)** of `/docs/convention/convention-guide-en.md`.
+        - Verify architectural integrity (Layered Architecture, CQS) from Section I.
+        - Apply Kotlin-specific safety and performance rules from Section III.
+
+        ### **Style & Formatting (Checkstyle Compliance)**
+        - ensure code complies with the static analysis rules defined in `/config/detekt/detekt.yml`.
+        - If Detekt fails to catch a naming convention or complexity issue defined in the config, please point it out.
+
+    - path: "src/main/kotlin/**/*.kts"
+      instructions: |
+        Kotlin script best practices to check:
+
+        Language correctness:
+        - Null safety: Ensure proper use of nullable types, avoid unnecessary null assertions (!!)
+        - Immutability: Prefer val over var, use immutable collections where possible
+
+        Code quality:
+        - Complexity: Flag overly complex scripts
+        - Naming conventions: Follow Kotlin naming conventions
+
+        Security:
+        - No hardcoded secrets or credentials
+
+    - path: "**/batch/**/*.kt"
+      instructions: |
+        - **Kotlin Style**: Follow Kotlin idiomatic ways (e.g., use `let`, `run`, `apply` appropriately, prefer immutable `val`).
+        - **Spring Batch Kotlin DSL**: When using DSL, ensure the flow is easy to follow. If a `Step` logic becomes too long within the DSL, suggest extracting it into a separate `Tasklet` or `ItemProcessor`.
+        - **Documentation (KDoc)**: 
+          - Do not ask for KDocs on `data class` or simple functions.
+          - **Focus on the 'Why'**: In `ItemProcessor` or complex `Business Logic`, if the code doesn't explain "Why" a certain transformation is happening, request a concise KDoc.
+        - **Null Safety**: Kotlin's strength is null safety. Scrutinize any use of `!!` (double bang) operator and suggest safer alternatives like `?:` or `requireNotNull()`.
+        - **Performance**: In Batch processing, avoid heavy object allocation inside `process` or `write` loops.
+
+  tools:
+    # Secret Info 유출 방지
+    gitleaks:
+      enabled: true
+    # Dockerfile 린터
+    hadolint:
+      enabled: true
+    # IaC 파일 (Kubernetes, Docker 등) 보안 스캐너
+    trivy:
+      enabled: true
+    # 인프라 설정 파일 정적 분석
+    checkov:
+      enabled: true
+
+  # 기타
+  abort_on_close: true # PR이 머지되거나 닫히면 리뷰 중단
+  disable_cache: false # 리뷰가 실행될 때마다 코드나 의존성 캐싱 여부
+
+  # 자동 리뷰
+  auto_review:
+    enabled: true
+    auto_incremental_review: true # PR 코드 수정 리뷰 반영
+    drafts: false # 초안 작성 중인 경우 리뷰 X
+    base_branches: ["develop", "main"]
+
+    ignore_usernames: ["dependabot", "dependabot[bot]"]
+
+chat:
+  auto_reply: true
+
+  integrations:
+    jira:
+      usage: enabled
+
+knowledge_base:
+  opt_out: false # 지식 베이스 사용 여부
+  web_search: # 웹 검색 허용
+    enabled: true
+  jira:
+    usage: enabled
+    project_keys: ["TGNX"]
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "**/docs/convention/convention-guide-en.md"
+      - "**/config/detekt/detekt.yml"
+      - "**/config/checkstyle/java-checkstyle.xml"
+  learnings: # 지식 사용 유효 범위 설정
+    scope: local
+  issues:
+    scope: auto # 이슈 검색 범위
+  pull_requests: # PR 참고 범위
+    scope: local

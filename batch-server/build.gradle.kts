@@ -1,10 +1,8 @@
 plugins {
-	java
-	id("org.springframework.boot") version "3.5.12"
-	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.1.0"
-	kotlin("plugin.spring") version "2.1.0"
-	kotlin("plugin.noarg") version "2.1.0"
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.kotlin.spring)
+	alias(libs.plugins.spring.boot)
+	kotlin("plugin.noarg") version "2.1.0"  
 }
 
 noArg {
@@ -20,11 +18,8 @@ java {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
 dependencies {
+	implementation(platform(libs.spring.dependency))
 	implementation("org.springframework.boot:spring-boot-starter-batch")
 	implementation("org.projectlombok:lombok")
 
@@ -43,8 +38,6 @@ dependencies {
 	testImplementation("io.mockk:mockk:1.13.10")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-	implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<Test>().configureEach {
