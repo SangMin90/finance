@@ -54,6 +54,7 @@ reviews:
     - "!**/target/**"
 
     # 기타
+    - ".github/workflows/**"
     - "!**/build/**"
     - "!**/.gradle/**"
     - "!**/out/**"
