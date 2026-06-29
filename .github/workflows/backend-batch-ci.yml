@@ -56,5 +56,5 @@ jobs:
           paths: ${{ github.workspace }}/batch-server/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 50
-          min-coverage-changed-lines: 50
+          min-coverage-changed-files: 50
           update-comment: true
