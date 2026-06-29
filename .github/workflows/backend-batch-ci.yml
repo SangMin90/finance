@@ -5,8 +5,8 @@ on:
 
   push:
     branches: [ "develop", "feature/**" ]
-#    paths:
-#      - 'batch-server/**'
+    paths:
+      - 'batch-server/**'
   pull_request:
     branches: [ "main", "develop" ]
     paths:
