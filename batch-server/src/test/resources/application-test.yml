@@ -1,0 +1,29 @@
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    meta:
+      jdbc-url: jdbc:h2:mem:test_meta_db
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+    finance:
+      jdbc-url: jdbc:h2:mem:test_finance_db;MODE=MySQL;DB_CLOSE_DELAY=-1
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+
+  config:
+    activate:
+      on-profile: test
+
+logging:
+  level:
+    org.springframework.jdbc.core: debug

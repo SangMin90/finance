@@ -2,7 +2,9 @@ plugins {
 	alias(libs.plugins.kotlin.jvm)
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
-	kotlin("plugin.noarg") version "2.1.0"  
+	kotlin("plugin.noarg") version "2.1.0"
+
+	jacoco
 }
 
 noArg {
@@ -38,6 +40,76 @@ dependencies {
 	testImplementation("io.mockk:mockk:1.13.10")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+jacoco {
+	toolVersion = "0.8.14"
+}
+
+tasks.jacocoTestReport {
+	reports {
+		xml.required = true
+		csv.required = false
+		html.required = true
+
+		xml.outputLocation.set(layout.buildDirectory.file("build/reports/jacoco/testCoverage/testCoverage.xml"))
+
+		classDirectories.setFrom(
+			sourceSets.main.get().output.asFileTree.matching {
+				exclude("com/finance/batch/BatchServerApplication*")
+			}
+		)
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+
+	// 애플리케이션 진입점(main)은 테스트 대상에서 제외
+	val excludedClasses = listOf("com.finance.batch.BatchServerApplication*")
+
+	violationRules {
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = "0.50".toBigDecimal()
+			}
+
+			excludes = excludedClasses
+		}
+
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = "0.40".toBigDecimal()	// 초기 단계 배치 로직 특성상 분기 커버리지 목표는 완화해서 설정
+			}
+
+			excludes = excludedClasses
+		}
+
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "CLASS"
+				value = "COVEREDRATIO"
+				minimum = "0.50".toBigDecimal() // 팀 정책 임계값(LINE/BRANCH와 통일), 완전 미테스트 클래스 누적 방지
+			}
+
+			excludes = excludedClasses
+		}
+	}
+
+	mustRunAfter(tasks.jacocoTestReport)
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.withType<Test>().configureEach {
