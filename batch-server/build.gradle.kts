@@ -2,7 +2,9 @@ plugins {
 	alias(libs.plugins.kotlin.jvm)
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
-	kotlin("plugin.noarg") version "2.1.0"  
+	kotlin("plugin.noarg") version "2.1.0"
+
+	jacoco
 }
 
 noArg {
@@ -38,6 +40,79 @@ dependencies {
 	testImplementation("io.mockk:mockk:1.13.10")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+jacoco {
+	toolVersion = "0.8.14"
+}
+
+tasks.jacocoTestReport {
+	reports {
+		xml.required = true
+		csv.required = false
+		html.required = true
+
+		classDirectories.setFrom(
+			sourceSets.main.get().output.asFileTree.matching {
+				exclude("com/finance/batch/BatchServerApplication*")
+			}
+		)
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+
+	val excludedClasses = listOf("com.finance.batch.BatchServerApplication*")
+
+	violationRules {
+		rule {
+			limit {
+				minimum = "0.5".toBigDecimal()
+			}
+		}
+
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = "0.50".toBigDecimal()
+			}
+
+			excludes = excludedClasses
+		}
+
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = "0.40".toBigDecimal()
+			}
+
+			excludes = excludedClasses
+		}
+
+		rule {
+			element = "BUNDLE"
+
+			limit {
+				counter = "CLASS"
+				value = "COVEREDRATIO"
+				minimum = "1.00".toBigDecimal() // 모든 클래스가 최소 한 번은 테스트에 참여
+			}
+
+			excludes = excludedClasses
+		}
+	}
+
+	mustRunAfter(tasks.jacocoTestReport)
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.withType<Test>().configureEach {
