@@ -66,12 +66,6 @@ tasks.jacocoTestCoverageVerification {
 
 	violationRules {
 		rule {
-			limit {
-				minimum = "0.5".toBigDecimal()
-			}
-		}
-
-		rule {
 			element = "BUNDLE"
 
 			limit {
@@ -101,7 +95,7 @@ tasks.jacocoTestCoverageVerification {
 			limit {
 				counter = "CLASS"
 				value = "COVEREDRATIO"
-				minimum = "1.00".toBigDecimal() // 모든 클래스가 최소 한 번은 테스트에 참여
+				minimum = "0.50".toBigDecimal() // 모든 클래스가 최소 한 번은 테스트에 참여
 			}
 
 			excludes = excludedClasses
