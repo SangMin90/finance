@@ -52,6 +52,8 @@ tasks.jacocoTestReport {
 		csv.required = false
 		html.required = true
 
+		xml.outputLocation.set(layout.buildDirectory.file("build/reports/jacoco/testCoverage/testCoverage.xml"))
+
 		classDirectories.setFrom(
 			sourceSets.main.get().output.asFileTree.matching {
 				exclude("com/finance/batch/BatchServerApplication*")
