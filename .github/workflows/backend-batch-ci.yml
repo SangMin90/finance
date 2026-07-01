@@ -20,6 +20,7 @@ jobs:
       contents: read
       statuses: write
       checks: write
+      pull-requests: write
 
     steps:
       - name: Checkout Source Code
@@ -37,8 +38,8 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x ./gradlew
 
-      - name: Test and Build with Gradle
-        run: ./gradlew :batch-server:clean build
+      - name: Build with Gradle
+        run: ./gradlew :batch-server:clean build -x test
 
       - name: Run Specific Batch Job
         run: ./gradlew :batch-server:test --tests "com.finance.batch.**.*Test"
