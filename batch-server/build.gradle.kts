@@ -2,7 +2,7 @@ plugins {
 	alias(libs.plugins.kotlin.jvm)
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
-	kotlin("plugin.noarg") version "2.1.0"
+	alias(libs.plugins.kotlin.noarg)
 
 	jacoco
 }
@@ -64,7 +64,6 @@ tasks.jacocoTestReport {
 
 tasks.jacocoTestCoverageVerification {
 
-	// 애플리케이션 진입점(main)은 테스트 대상에서 제외
 	val excludedClasses = listOf("com.finance.batch.BatchServerApplication*")
 
 	violationRules {
@@ -86,7 +85,7 @@ tasks.jacocoTestCoverageVerification {
 			limit {
 				counter = "BRANCH"
 				value = "COVEREDRATIO"
-				minimum = "0.40".toBigDecimal()	// 초기 단계 배치 로직 특성상 분기 커버리지 목표는 완화해서 설정
+				minimum = "0.40".toBigDecimal()
 			}
 
 			excludes = excludedClasses
@@ -98,7 +97,7 @@ tasks.jacocoTestCoverageVerification {
 			limit {
 				counter = "CLASS"
 				value = "COVEREDRATIO"
-				minimum = "0.50".toBigDecimal() // 팀 정책 임계값(LINE/BRANCH와 통일), 완전 미테스트 클래스 누적 방지
+				minimum = "0.50".toBigDecimal() // 모든 클래스가 최소 한 번은 테스트에 참여
 			}
 
 			excludes = excludedClasses
