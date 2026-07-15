@@ -2,7 +2,7 @@ plugins {
 	alias(libs.plugins.kotlin.jvm)
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
-	kotlin("plugin.noarg") version "2.1.0"
+	alias(libs.plugins.kotlin.noarg)
 
 	jacoco
 }
