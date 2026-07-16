@@ -8,6 +8,7 @@ springBoot = "3.5.12"
 [plugins]
 kotlin-jvm = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
 kotlin-spring = {id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin"}
+kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
 
 spring-boot = {id = "org.springframework.boot", version.ref = "springBoot"}
 
